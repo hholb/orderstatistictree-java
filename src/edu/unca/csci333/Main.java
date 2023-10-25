@@ -1,7 +1,14 @@
+// Hayden Holbrook
+// CSCI-333 Fall 2023
+// October 25, 2023
+// Homework 6 Order Statistic Tree
 package edu.unca.csci333;
 
 import java.util.Random;
 
+/**
+ * Creates a BST and runs through some of its functionality.
+ */
 public class Main {
     private static final int BOUND = 50; // Upper bound for number generation
     private static final int NUM_ELEMENTS = 25; // max number of elements to insert during tests

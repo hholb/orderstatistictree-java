@@ -1,22 +1,50 @@
+// Hayden Holbrook
+// CSCI-333 Fall 2023
+// October 25, 2023
+// Homework 6 Order Statistic Tree
 package edu.unca.csci333;
 
+/**
+ * A Binary Search Tree with the ability to calculate order-statistic and rank
+ * values for the stored data.
+ *
+ * @param <T> type of element to store in the tree. T must extend Comparable<T>
+ */
 public class BinarySearchTree<T extends Comparable<T>> {
     private int size;
     private BSTNode<T> root;
 
+    /**
+     * Creates an empty BinarySearchTree.
+     */
     public BinarySearchTree() {
         this.size = 0;
         this.root = null;
     }
 
+    /**
+     * Returns the number of nodes in the tree.
+     *
+     * @return number of nodes in the tree.
+     */
     public int getSize() {
         return this.size;
     }
 
+    /**
+     * Returns a handle to the root node of the tree, null if the tree is empty.
+     *
+     * @return root of the tree, null if tree is empty
+     */
     public BSTNode<T> getRoot() {
         return this.root;
     }
 
+    /**
+     * Inserts the given item into the tree.
+     *
+     * @param item to be inserted.
+     */
     public void insert(T item) {
         this.insert(this.root, item);
     }
@@ -61,6 +89,10 @@ public class BinarySearchTree<T extends Comparable<T>> {
         }
     }
 
+    /**
+     * Performs a pre-order traversal of the tree printing the value of each
+     * node as it is encountered.
+     */
     public void preOrder() {
         System.out.print("Pre-order: ");
         preOrder(this.root);
@@ -75,6 +107,10 @@ public class BinarySearchTree<T extends Comparable<T>> {
         }
     }
 
+    /**
+     * Performs a post-order traversal of the tree printing the value of each
+     * node as it is encountered.
+     */
     public void postOrder() {
         System.out.print("Post-order: ");
         postOrder(this.root);
@@ -89,6 +125,10 @@ public class BinarySearchTree<T extends Comparable<T>> {
         }
     }
 
+    /**
+     * Performs an in-order traversal of the tree printing the value of each
+     * node as it is encountered.
+     */
     public void inOrder() {
         System.out.print("In-order: ");
         inOrder(this.root);
@@ -103,6 +143,12 @@ public class BinarySearchTree<T extends Comparable<T>> {
         }
     }
 
+    /**
+     * Search for the given item in the tree
+     *
+     * @param item item to be searched for
+     * @return the item if it is present in the tree, otherwise null
+     */
     public T search(T item) {
         BSTNode<T> node = search(this.root, item);
         if (node != null) {
@@ -123,13 +169,18 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
 
+    /**
+     * Deletes the given item from the tree.
+     *
+     * @param item to be deleted.
+     */
     public void delete(T item) {
         BSTNode<T> node = search(this.root, item);
         if (node == null) return;
         delete(node);
     }
 
-    public void delete(BSTNode<T> node) {
+    private void delete(BSTNode<T> node) {
         BSTNode<T> newNode = minimum(node.getRight());
         if (node.getLeft() == null) {
             transplant(node, node.getRight());
@@ -162,6 +213,12 @@ public class BinarySearchTree<T extends Comparable<T>> {
         }
     }
 
+    /**
+     * Returns the next item, in sorted order, form the given item in the tree.
+     *
+     * @param item to find the successor of
+     * @return the successor of item, null if item has no successor
+     */
     public T successor(T item) {
         BSTNode<T> result = search(this.root, item);
         if (result != null) {
@@ -181,6 +238,12 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return node.getP();
     }
 
+    /**
+     * Returns the previous item, in sorted order, form the given item in the tree.
+     *
+     * @param item to find the predecessor of
+     * @return the predecessor of item, null if item has no predecessor
+     */
     public T predecessor(T item) {
         BSTNode<T> result = search(this.root, item);
         if (result != null) {
@@ -200,6 +263,12 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return node.getP();
     }
 
+    /**
+     * Returns the element with the given order-statistic.
+     *
+     * @param orderStatistic order-statistic to find within the tree.
+     * @return the item with the given order-statistic, null no item has the given order-statistic.
+     */
     public T select(int orderStatistic) {
         BSTNode<T> result = select(this.root, orderStatistic);
 
@@ -221,6 +290,12 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
 
+    /**
+     * Finds the rank of the given element as compared to other elements in the tree.
+     *
+     * @param element to find the rank of.
+     * @return the rank of the given element, -1 if the given element is not in the tree.
+     */
     public int rank(T element) {
         BSTNode<T> node = search(this.root, element);
         if (node == null) {
@@ -248,6 +323,11 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
 
+    /**
+     * Returns the maximum value contained in the tree.
+     *
+     * @return the maximum value contained in the tree.
+     */
     public T maximum() {
         return maximum(this.root).getData();
     }
@@ -260,6 +340,11 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return currentNode;
     }
 
+    /**
+     * Returns the minimum value contained in the tree.
+     *
+     * @return the minimum value contained in the tree.
+     */
     public T minimum() {
         BSTNode<T> result = minimum(this.root);
         return (result != null) ? result.getData() : null;
