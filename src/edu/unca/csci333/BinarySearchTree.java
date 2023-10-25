@@ -24,7 +24,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
     private void insert(BSTNode<T> node, T item) {
         // if tree is size 0, set the root to a new node
         if (this.size == 0) {
-            this.root = new BSTNode<T>(item);
+            this.root = new BSTNode<>(item);
             this.size++;
             return;
         }
@@ -34,17 +34,17 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
         // walk the tree
         while (currentNode != null) {
-           if (currentNode.getData().compareTo(item) < 0) { // go right
-              parent = currentNode;
-              currentNode = currentNode.getRight();
+            if (currentNode.getData().compareTo(item) < 0) { // go right
+                parent = currentNode;
+                currentNode = currentNode.getRight();
             } else { // go left
-              parent = currentNode;
-              currentNode = currentNode.getLeft();
-           }
+                parent = currentNode;
+                currentNode = currentNode.getLeft();
+            }
         }
 
         // insert the new node
-        BSTNode<T> newNode = new BSTNode<T>(item);
+        BSTNode<T> newNode = new BSTNode<>(item);
         newNode.setP(parent);
         if (parent != null) {
             if (parent.getData().compareTo(item) < 0) { // go right
@@ -53,7 +53,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
                 parent.setLeft(newNode);
             }
         }
-       this.size++;
+        this.size++;
 
         while (newNode != null) {
             newNode.setSize(newNode.getSize() + 1);
@@ -70,8 +70,8 @@ public class BinarySearchTree<T extends Comparable<T>> {
     private void preOrder(BSTNode<T> node) {
         if (node != null) {
             System.out.print(node.getData().toString() + " ");
-           preOrder(node.getLeft());
-           preOrder(node.getRight());
+            preOrder(node.getLeft());
+            preOrder(node.getRight());
         }
     }
 
@@ -96,11 +96,11 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
     private void inOrder(BSTNode<T> node) {
-       if (node != null) {
-           inOrder(node.getLeft());
-           System.out.print(node.getData().toString() + " ");
-           inOrder(node.getRight());
-       }
+        if (node != null) {
+            inOrder(node.getLeft());
+            System.out.print(node.getData().toString() + " ");
+            inOrder(node.getRight());
+        }
     }
 
     public T search(T item) {
@@ -139,24 +139,26 @@ public class BinarySearchTree<T extends Comparable<T>> {
             newNode = node.getP();
         } else {
             BSTNode<T> successor = minimum(node.getRight());
-            if (successor.getP() != node) {
-                newNode = successor.getP();
-                transplant(successor, successor.getRight());
-                successor.setRight(node.getRight());
-                successor.getRight().setP(successor);
+            if (successor != null) {
+                if (successor.getP() != node) {
+                    newNode = successor.getP();
+                    transplant(successor, successor.getRight());
+                    successor.setRight(node.getRight());
+                    successor.getRight().setP(successor);
+                }
+                transplant(node, successor);
+                successor.setLeft(node.getLeft());
+                successor.getLeft().setP(successor);
             }
-            transplant(node, successor);
-            successor.setLeft(node.getLeft());
-            successor.getLeft().setP(successor);
         }
         this.size--;
 
         while (newNode != null) {
-            int size = 1;
-            if (newNode.getLeft() != null) size += newNode.getLeft().getSize();
-            if (newNode.getRight() != null) size += newNode.getRight().getSize();
-           newNode.setSize(size);
-           newNode = newNode.getP();
+            int newSize = 1;
+            if (newNode.getLeft() != null) newSize += newNode.getLeft().getSize();
+            if (newNode.getRight() != null) newSize += newNode.getRight().getSize();
+            newNode.setSize(newSize);
+            newNode = newNode.getP();
         }
     }
 
@@ -174,12 +176,12 @@ public class BinarySearchTree<T extends Comparable<T>> {
             return minimum(node.getRight());
         }
         while (node.getP() != null && node == node.getP().getRight()) {
-           node = node.getP();
+            node = node.getP();
         }
         return node.getP();
     }
 
-    public T predecessor (T item) {
+    public T predecessor(T item) {
         BSTNode<T> result = search(this.root, item);
         if (result != null) {
             BSTNode<T> predecessor = predecessor(result);
@@ -187,31 +189,33 @@ public class BinarySearchTree<T extends Comparable<T>> {
         }
         return null;
     }
+
     private BSTNode<T> predecessor(BSTNode<T> node) {
-       if (node.getLeft() != null) {
-           return maximum(node.getLeft());
-       }
-       while (node.getP() != null && node == node.getP().getLeft()) {
-           node = node.getP();
-       }
-       return node.getP();
+        if (node.getLeft() != null) {
+            return maximum(node.getLeft());
+        }
+        while (node.getP() != null && node == node.getP().getLeft()) {
+            node = node.getP();
+        }
+        return node.getP();
     }
 
-    public T select(int order_statistic) {
-        BSTNode<T> result = select(this.root, order_statistic);
-        return result.getData();
+    public T select(int orderStatistic) {
+        BSTNode<T> result = select(this.root, orderStatistic);
+
+        return (result != null) ? result.getData() : null;
     }
 
-    private BSTNode<T> select(BSTNode<T> node, int order_statistic) {
+    private BSTNode<T> select(BSTNode<T> node, int orderStatistic) {
         if (node != null) {
             int leftSize = (node.getLeft() != null) ? node.getLeft().getSize() : 0;
             int rank = leftSize + 1;
-            if (order_statistic == rank)
+            if (orderStatistic == rank)
                 return node;
-            else if (order_statistic < rank) {
-                return select(node.getLeft(), order_statistic);
+            else if (orderStatistic < rank) {
+                return select(node.getLeft(), orderStatistic);
             } else
-                return select(node.getRight(), order_statistic - rank);
+                return select(node.getRight(), orderStatistic - rank);
         }
         return null;
     }
@@ -257,7 +261,8 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
     public T minimum() {
-        return minimum(this.root).getData();
+        BSTNode<T> result = minimum(this.root);
+        return (result != null) ? result.getData() : null;
     }
 
     private BSTNode<T> minimum(BSTNode<T> node) {
