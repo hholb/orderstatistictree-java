@@ -14,17 +14,33 @@ class BinarySearchTreeTest {
 
     @Test
     public void test_Search() {
-        // TODO
+        BinarySearchTree tree = new BinarySearchTree<Integer>();
+        for (int i = 5; i > 0; i--) {
+            tree.insert(i);
+        }
+
+        assert tree.search(4).compareTo(4) == 0;
+        assert tree.search(3).compareTo(3) == 0;
     }
 
     @Test
     public void test_Minimum() {
-        // TODO
+        BinarySearchTree tree = new BinarySearchTree<Integer>();
+        for (int i = 5; i > 0; i--) {
+           tree.insert(i);
+        }
+
+        assert tree.minimum().compareTo(1) == 0;
     }
 
     @Test
     public void test_Maximum() {
-        // TODO
+        BinarySearchTree tree = new BinarySearchTree<Integer>();
+        for (int i = 0; i <= 5; i++) {
+            tree.insert(i);
+        }
+
+        assert tree.maximum().compareTo(5) == 0;
     }
 
     @Test
@@ -39,12 +55,22 @@ class BinarySearchTreeTest {
 
     @Test
     public void test_Insert() {
-        // TODO
+        BinarySearchTree tree = new BinarySearchTree();
+        assert tree.getSize() == 0;
+        tree.insert(1);
+        assert tree.getSize() == 1;
+        assert tree.maximum().compareTo(1) == 0;
     }
 
     @Test
     public void test_Delete() {
-        // TODO
+        BinarySearchTree tree = new BinarySearchTree<Integer>();
+        for (int i = 0; i <= 5; i++) {
+            tree.insert(i);
+        }
+        assert tree.getSize() == 6;
+        tree.delete(4);
+        assert tree.getSize() == 5;
     }
 
     @Test
